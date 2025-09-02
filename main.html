@@ -1,0 +1,63 @@
+<html>
+  <head>
+    <title>Main</title>
+    <link rel="stylesheet" href="/Static/style.css" />
+  </head>
+  <body>
+    <div class="grid-container">
+    <h2>Universal Sematic Search</h2>
+    <h3>Search for stuff in videos, images, PDF and text</h3>
+    <form id="dataForm">
+        <label for="messageInput">Enter text to search for:</label>
+        <input type="text" id="searchInput" name="search">
+        <p>
+         <label for="FileType">Choose a file format for search:</label>
+         <select id="FileType" name="FileType" class="minimal">
+           <option value="all">All File Formats</option>
+           <option value=".pdf">PDF Files</option>
+           <option value=".txt">Text Files</option>
+           <option value=".mp4">MP4 Video Files</option>
+           <option value=".mov">MOV Video Files</option>
+           <option value=".jpg">JPG Photo Files</option>
+           <option value=".jpeg">JPEG Photo Files</option>
+           <option value=".webp">WEBP Photo Files</option>
+         </select>
+        </p>
+        <p>
+        <button type="submit" class="fancybutton">Submit</button>
+        </p>
+        </form>
+        </div>
+        <script>
+        document.getElementById('dataForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+	    //alert("1");
+            const searchText = document.getElementById('searchInput').value;
+            const fileType = document.getElementById('FileType').value;
+            //alert(fileType);
+            //alert(searchText);       
+            const data = { searchText: searchText, fileType: fileType};
+            
+            fetch('/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.text()) // Get response as text (HTML in this case)
+            .then(html => {    // overwrite contents of the page in the browser
+                document.open();
+                document.write(html);
+                document.close();
+                //alert(html);
+            })
+            .catch(error => console.error('Error:', error));         
+        });
+
+    
+    </script>
+    
+  </body>
+</html>
